@@ -9,7 +9,4 @@
 
 ## Projeto de API para um sistema de locadora de carros
 
-### Tecnologias usadas:
-- Laravel
-- PHP
-- Postman
+### Aplicação Full Stack Back-end API Laravel com Front-end Vue.JS
