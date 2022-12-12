@@ -32,3 +32,16 @@ Route::apiResource('marca', 'App\Http\Controllers\MarcaController');
 
 //modelo
 Route::apiResource('modelo', 'App\Http\Controllers\ModeloController');
+
+//login
+Route::post('login', 'App\Http\Controllers\AuthController@login');
+
+//logout
+Route::post('logout', 'App\Http\Controllers\AuthController@logout');
+
+//refresh
+Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
+
+//me
+Route::post('me', 'App\Http\Controllers\AuthController@me');
+
