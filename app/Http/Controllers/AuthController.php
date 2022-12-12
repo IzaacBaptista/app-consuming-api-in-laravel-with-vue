@@ -24,14 +24,16 @@ class AuthController extends Controller
     //logout
     public function logout()
     {
-        return 'logout';
+        auth('api')->logout();
+
+        return response()->json(['message' => 'Logout realizado com sucesso']);
     }
 
     //refresh
     public function refresh()
     {
         $token = auth('api')->refresh();
-        
+
         return response()->json(['token' => $token], 200);
     }
 
