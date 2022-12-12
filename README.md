@@ -7,6 +7,4 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Projeto de API para um sistema de locadora de carros
-
-### Aplicação Full Stack Back-end API Laravel com Front-end Vue.JS
+## Projeto de uma aplicação Full Stack Back-end API com Laravel e Front-end com Vue.JS
