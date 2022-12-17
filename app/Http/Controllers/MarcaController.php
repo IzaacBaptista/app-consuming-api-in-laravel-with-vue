@@ -9,12 +9,9 @@ use App\Repositories\MarcaRepository;
 
 class MarcaController extends Controller
 {
-
-    public function __construct(Marca $marca)
-    {
+    public function __construct(Marca $marca) {
         $this->marca = $marca;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,26 +19,35 @@ class MarcaController extends Controller
      */
     public function index(Request $request)
     {
+
         $marcaRepository = new MarcaRepository($this->marca);
 
-        if ($request->has('atributos_modelos')) {
-            $atributos_modelos = 'modelos:marca_id,' . $request->atributos_modelos;
+        if($request->has('atributos_modelos')) {
+            $atributos_modelos = 'modelos:id,'.$request->atributos_modelos;
             $marcaRepository->selectAtributosRegistrosRelacionados($atributos_modelos);
         } else {
             $marcaRepository->selectAtributosRegistrosRelacionados('modelos');
         }
 
-        if ($request->has('filtro')) {
+        if($request->has('filtro')) {
             $marcaRepository->filtro($request->filtro);
         }
 
-        if ($request->has('atributos')) {
+        if($request->has('atributos')) {
             $marcaRepository->selectAtributos($request->atributos);
-        }
+        } 
 
-        return response()->json([
-            'marcas' => $marcaRepository->getResultado()
-        ], 200);
+        return response()->json($marcaRepository->getResultado(), 200);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -52,23 +58,17 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            $this->marca->rules(),
-            $this->marca->feedback()
-        );
+        $request->validate($this->marca->rules(), $this->marca->feedback());
 
         $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens/marcas', 'public');
+        $imagem_urn = $imagem->store('imagens', 'public');
 
         $marca = $this->marca->create([
             'nome' => $request->nome,
             'imagem' => $imagem_urn
         ]);
 
-        return response()->json([
-            'marca' => $marca,
-            'msg' => 'Salvo com sucesso'
-        ], 201);
+        return response()->json($marca, 201);
     }
 
     /**
@@ -77,17 +77,25 @@ class MarcaController extends Controller
      * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
         $marca = $this->marca->with('modelos')->find($id);
+        if($marca === null) {
+            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404) ;
+        } 
 
-        if ($marca == null) {
-            return response()->json(['msg' => 'Marca não encontrada'], 404);
-        }
+        return response()->json($marca, 200);
+    }
 
-        return response()->json([
-            'marca: ' => $marca
-        ], 200);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Marca  $marca
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Marca $marca)
+    {
+        //
     }
 
     /**
@@ -97,49 +105,54 @@ class MarcaController extends Controller
      * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
         $marca = $this->marca->find($id);
 
-        if ($marca == null) {
-            return response()->json(['msg' => 'Marca não encontrada'], 404);
+        if($marca === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
 
-        if ($request->method() === 'PATCH') {
+        if($request->method() === 'PATCH') {
+
             $regrasDinamicas = array();
 
-            foreach ($marca->rules() as $input => $regra) {
-                if (array_key_exists($input, $request->all())) {
+            //percorrendo todas as regras definidas no Model
+            foreach($marca->rules() as $input => $regra) {
+                
+                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                if(array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
+            
+            $request->validate($regrasDinamicas, $marca->feedback());
 
-            $request->validate(
-                $regrasDinamicas,
-                $this->marca->feedback()
-            );
         } else {
-            $request->validate(
-                $this->marca->rules(),
-                $this->marca->feedback()
-            );
+            $request->validate($marca->rules(), $marca->feedback());
         }
-
-        if ($request->file('imagem')) {
+        
+        //remove o arquivo antigo caso um novo arquivo tenha sido enviado no request
+        if($request->file('imagem')) {
             Storage::disk('public')->delete($marca->imagem);
         }
-
+        
         $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens/marcas', 'public');
+        $imagem_urn = $imagem->store('imagens', 'public');
 
+        //preencher o objeto $marca com os dados do request
         $marca->fill($request->all());
         $marca->imagem = $imagem_urn;
+        //dd($marca->getAttributes());
         $marca->save();
+        /*
+        $marca->update([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        ]);
+        */
 
-        return response()->json([
-            'marca' => $marca,
-            'msg' => 'Atualizado com sucesso'
-        ], 200);
+        return response()->json($marca, 200);
     }
 
     /**
@@ -148,22 +161,19 @@ class MarcaController extends Controller
      * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy($id)
     {
         $marca = $this->marca->find($id);
 
-        if ($marca == null) {
-            return response()->json(['msg' => 'Marca não encontrada'], 404);
+        if($marca === null) {
+            return response()->json(['erro' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
         }
 
-        if ($marca->imagem) {
-            Storage::disk('public')->delete($marca->imagem);
-        }
+        //remove o arquivo antigo
+        Storage::disk('public')->delete($marca->imagem);        
 
         $marca->delete();
-
-        return response()->json([
-            'msg' => 'Deletado com sucesso'
-        ], 200);
+        return response()->json(['msg' => 'A marca foi removida com sucesso!'], 200);
+        
     }
 }

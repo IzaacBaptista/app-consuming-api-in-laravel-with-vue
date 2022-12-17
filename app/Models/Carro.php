@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Carro extends Model
 {
     use HasFactory;
-
-    protected $table = 'carros';
-
     protected $fillable = ['modelo_id', 'placa', 'disponivel', 'km'];
 
     public function rules() {
@@ -21,14 +18,6 @@ class Carro extends Model
             'km' => 'required'
         ];
     }
-
-    public function feedback(){
-        return [
-            'required' => 'O campo :attribute é obrigatório',
-            'modelo_id.exists' => 'O modelo informado não existe'
-        ];
-    }
-    
 
     public function modelo() {
         return $this->belongsTo('App\Models\Modelo');

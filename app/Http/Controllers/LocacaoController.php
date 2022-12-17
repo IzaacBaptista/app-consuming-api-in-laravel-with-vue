@@ -8,9 +8,7 @@ use App\Repositories\LocacaoRepository;
 
 class LocacaoController extends Controller
 {
-
-    public function __construct(Locacao $locacao)
-    {
+    public function __construct(Locacao $locacao) {
         $this->locacao = $locacao;
     }
 
@@ -23,17 +21,25 @@ class LocacaoController extends Controller
     {
         $locacaoRepository = new LocacaoRepository($this->locacao);
 
-        if ($request->has('filtro')) {
+        if($request->has('filtro')) {
             $locacaoRepository->filtro($request->filtro);
         }
 
-        if ($request->has('atributos')) {
+        if($request->has('atributos')) {
             $locacaoRepository->selectAtributos($request->atributos);
-        }
+        } 
 
-        return response()->json([
-            'locacao' => $locacaoRepository->getResultado()
-        ], 200);
+        return response()->json($locacaoRepository->getResultado(), 200);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -44,10 +50,7 @@ class LocacaoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            $this->locacao->rules(),
-            $this->locacao->feedback()
-        );
+        $request->validate($this->locacao->rules());
 
         $locacao = $this->locacao->create([
             'cliente_id' => $request->cliente_id,
@@ -57,96 +60,95 @@ class LocacaoController extends Controller
             'data_final_realizado_periodo' => $request->data_final_realizado_periodo,
             'valor_diaria' => $request->valor_diaria,
             'km_inicial' => $request->km_inicial,
-            'km_final' => $request->km_final,
+            'km_final' => $request->km_final
         ]);
 
-        return response()->json([
-            'locacao' => $locacao,
-            'msg' => 'Salvo com sucesso'
-        ], 201);
+        return response()->json($locacao, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Integer
+     * @param  \App\Models\Locacao  $locacao
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
         $locacao = $this->locacao->find($id);
+        if($locacao === null) {
+            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404) ;
+        } 
 
-        if ($locacao == null) {
-            return response()->json(['msg' => 'Locacao não encontrada'], 404);
-        }
+        return response()->json($locacao, 200);
+    }
 
-        return response()->json([
-            'locacao: ' => $locacao
-        ], 200);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Locacao  $locacao
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Locacao $locacao)
+    {
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Integer
+     * @param  \App\Models\Locacao  $locacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
         $locacao = $this->locacao->find($id);
 
-        if ($locacao == null) {
-            return response()->json(['msg' => 'Locacao não encontrada'], 404);
+        if($locacao === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
 
-        if ($request->method() === 'PATCH') {
+        if($request->method() === 'PATCH') {
+
             $regrasDinamicas = array();
 
-            foreach ($locacao->rules() as $input => $regra) {
-                if (array_key_exists($input, $request->all())) {
+            //percorrendo todas as regras definidas no Model
+            foreach($locacao->rules() as $input => $regra) {
+                
+                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                if(array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
+            
+            $request->validate($regrasDinamicas);
 
-            $request->validate(
-                $regrasDinamicas,
-                $this->locacao->feedback()
-            );
         } else {
-            $request->validate(
-                $this->locacao->rules(),
-                $this->locacao->feedback()
-            );
+            $request->validate($locacao->rules());
         }
-
+        
         $locacao->fill($request->all());
         $locacao->save();
-
-        return response()->json([
-            'locacao' => $locacao,
-            'msg' => 'Atualizado com sucesso'
-        ], 200);
+        
+        return response()->json($locacao, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Integer
+     * @param  \App\Models\Locacao  $locacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy($id)
     {
         $locacao = $this->locacao->find($id);
 
-        if ($locacao == null) {
-            return response()->json(['msg' => 'Locacao não encontrada'], 404);
+        if($locacao === null) {
+            return response()->json(['erro' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
         }
 
         $locacao->delete();
-
-        return response()->json([
-            'msg' => 'Deletado com sucesso'
-        ], 200);
+        return response()->json(['msg' => 'A locação foi removida com sucesso!'], 200);
+        
     }
 }

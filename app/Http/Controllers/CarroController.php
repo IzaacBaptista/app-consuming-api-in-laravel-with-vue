@@ -8,9 +8,7 @@ use App\Repositories\CarroRepository;
 
 class CarroController extends Controller
 {
-
-    public function __construct(Carro $carro)
-    {
+    public function __construct(Carro $carro) {
         $this->carro = $carro;
     }
 
@@ -23,24 +21,32 @@ class CarroController extends Controller
     {
         $carroRepository = new CarroRepository($this->carro);
 
-        if ($request->has('atributos_modelo')) {
-            $atributos_modelo = 'modelo:marca_id,' . $request->atributos_modelo;
+        if($request->has('atributos_modelo')) {
+            $atributos_modelo = 'modelo:id,'.$request->atributos_modelo;
             $carroRepository->selectAtributosRegistrosRelacionados($atributos_modelo);
         } else {
             $carroRepository->selectAtributosRegistrosRelacionados('modelo');
         }
 
-        if ($request->has('filtro')) {
+        if($request->has('filtro')) {
             $carroRepository->filtro($request->filtro);
         }
 
-        if ($request->has('atributos')) {
+        if($request->has('atributos')) {
             $carroRepository->selectAtributos($request->atributos);
-        }
+        } 
 
-        return response()->json([
-            'carro' => $carroRepository->getResultado()
-        ], 200);
+        return response()->json($carroRepository->getResultado(), 200);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -51,10 +57,7 @@ class CarroController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            $this->carro->rules(),
-            $this->carro->feedback()
-        );
+        $request->validate($this->carro->rules());
 
         $carro = $this->carro->create([
             'modelo_id' => $request->modelo_id,
@@ -63,93 +66,92 @@ class CarroController extends Controller
             'km' => $request->km
         ]);
 
-        return response()->json([
-            'carro' => $carro,
-            'msg' => 'Salvo com sucesso'
-        ], 201);
+        return response()->json($carro, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Integer
+     * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
         $carro = $this->carro->with('modelo')->find($id);
+        if($carro === null) {
+            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404) ;
+        } 
 
-        if ($carro == null) {
-            return response()->json(['msg' => 'Carro não encontrado'], 404);
-        }
+        return response()->json($carro, 200);
+    }
 
-        return response()->json([
-            'carro: ' => $carro
-        ], 200);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Carro  $carro
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Carro $carro)
+    {
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Integer
+     * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
         $carro = $this->carro->find($id);
 
-        if ($carro == null) {
-            return response()->json(['msg' => 'Carro não encontrado'], 404);
+        if($carro === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
 
-        if ($request->method() === 'PATCH') {
+        if($request->method() === 'PATCH') {
+
             $regrasDinamicas = array();
 
-            foreach ($carro->rules() as $input => $regra) {
-                if (array_key_exists($input, $request->all())) {
+            //percorrendo todas as regras definidas no Model
+            foreach($carro->rules() as $input => $regra) {
+                
+                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                if(array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
+            
+            $request->validate($regrasDinamicas);
 
-            $request->validate(
-                $regrasDinamicas,
-                $this->carro->feedback()
-            );
         } else {
-            $request->validate(
-                $this->carro->rules(),
-                $this->carro->feedback()
-            );
+            $request->validate($carro->rules());
         }
-
+        
         $carro->fill($request->all());
         $carro->save();
-
-        return response()->json([
-            'carro' => $carro,
-            'msg' => 'Atualizado com sucesso'
-        ], 200);
+        
+        return response()->json($carro, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Integer
+     * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy($id)
     {
         $carro = $this->carro->find($id);
 
-        if ($carro == null) {
-            return response()->json(['msg' => 'Carro não encontrado'], 404);
+        if($carro === null) {
+            return response()->json(['erro' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
         }
 
         $carro->delete();
-
-        return response()->json([
-            'msg' => 'Deletado com sucesso'
-        ], 200);
+        return response()->json(['msg' => 'O carro foi removido com sucesso!'], 200);
+        
     }
 }
