@@ -2257,12 +2257,12 @@ var render = function render() {
     attrs: {
       "for": _vm.id
     }
-  }, [_vm._v(_vm._s(_vm.titulo))]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.titulo))]), _vm._v(" "), _vm._t("default"), _vm._v(" "), _c("div", {
     staticClass: "form-text text-muted",
     attrs: {
       id: _vm.idHelp
     }
-  }, [_vm._v(_vm._s(_vm.textoAjuda))])]);
+  }, [_vm._v(_vm._s(_vm.textoAjuda))])], 2);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -2464,7 +2464,7 @@ var render = function render() {
     staticClass: "form-row"
   }, [_c("div", {
     staticClass: "col mb-3"
-  }, [_c("input-container", {
+  }, [_c("input-container-component", {
     attrs: {
       titulo: "ID",
       id: "inputId",
@@ -2481,7 +2481,7 @@ var render = function render() {
     }
   })])], 1), _vm._v(" "), _c("div", {
     staticClass: "col mb-3"
-  }, [_c("input-container", {
+  }, [_c("input-container-component", {
     attrs: {
       titulo: "Nome da marca",
       id: "inputNome",
