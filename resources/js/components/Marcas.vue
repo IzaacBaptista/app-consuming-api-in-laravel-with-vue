@@ -67,7 +67,41 @@
           </template>
         </card-component>
         <!-- fim do card de listagem de marcas -->
-        <modal-component id="modalMarca" titulo="Adicionar marca"></modal-component>
+        <modal-component id="modalMarca" titulo="Adicionar marca">
+            <template v-slot:conteudo>
+                <div class="form-group">
+                  <input-container-component
+                    titulo="Nome da marca"
+                    id="novoNome"
+                    id-help="novoNomeHelp"
+                    texto-ajuda="Informe o nome da marca"
+                  >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="novoNome"
+                      aria-describedby="nonovoNomeHelp"
+                      placeholder="Nome da marca"
+                    />
+                  </input-container-component>
+      
+                  <input-container-component
+                    titulo="Imagem"
+                    id="novoImagem"
+                    id-help="novoImagemHelp"
+                    texto-ajuda="Seleciona uma imagem no formato PNG."
+                  >
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="novoImagem"
+                      aria-describedby="novoImagemHelp"
+                      placeholder="Selecione uma imagem"
+                    />
+                  </input-container-component>
+                </div>
+            </template>
+        </modal-component>
       </div>
     </div>
   </div>

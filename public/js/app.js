@@ -2615,7 +2615,46 @@ var render = function render() {
     attrs: {
       id: "modalMarca",
       titulo: "Adicionar marca"
-    }
+    },
+    scopedSlots: _vm._u([{
+      key: "conteudo",
+      fn: function fn() {
+        return [_c("div", {
+          staticClass: "form-group"
+        }, [_c("input-container-component", {
+          attrs: {
+            titulo: "Nome da marca",
+            id: "novoNome",
+            "id-help": "novoNomeHelp",
+            "texto-ajuda": "Informe o nome da marca"
+          }
+        }, [_c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            id: "novoNome",
+            "aria-describedby": "nonovoNomeHelp",
+            placeholder: "Nome da marca"
+          }
+        })]), _vm._v(" "), _c("input-container-component", {
+          attrs: {
+            titulo: "Imagem",
+            id: "novoImagem",
+            "id-help": "novoImagemHelp",
+            "texto-ajuda": "Seleciona uma imagem no formato PNG."
+          }
+        }, [_c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "file",
+            id: "novoImagem",
+            "aria-describedby": "novoImagemHelp",
+            placeholder: "Selecione uma imagem"
+          }
+        })])], 1)];
+      },
+      proxy: true
+    }])
   })], 1)])]);
 };
 var staticRenderFns = [];
@@ -2660,7 +2699,7 @@ var render = function render() {
     }
   }, [_vm._v(_vm._s(_vm.titulo))]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c("div", {
     staticClass: "modal-body"
-  }, [_vm._v("...")]), _vm._v(" "), _vm._m(1)])])]);
+  }, [_vm._t("conteudo")], 2), _vm._v(" "), _vm._m(1)])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
