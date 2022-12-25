@@ -60,14 +60,14 @@
               type="button"
               class="btn btn-primary btn-sm float-right"
               data-toggle="modal"
-              data-target="#exampleModal"
+              data-target="#modalMarca"
             >
               Adicionar
             </button>
           </template>
         </card-component>
         <!-- fim do card de listagem de marcas -->
-        <modal-component></modal-component>
+        <modal-component id="modalMarca" titulo="Adicionar marca"></modal-component>
       </div>
     </div>
   </div>

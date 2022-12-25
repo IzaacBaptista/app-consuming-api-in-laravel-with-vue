@@ -2184,7 +2184,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["titulo"]
+  props: ["id", "titulo"]
 });
 
 /***/ }),
@@ -2605,13 +2605,18 @@ var render = function render() {
           attrs: {
             type: "button",
             "data-toggle": "modal",
-            "data-target": "#exampleModal"
+            "data-target": "#modalMarca"
           }
         }, [_vm._v("\n            Adicionar\n          ")])];
       },
       proxy: true
     }])
-  }), _vm._v(" "), _c("modal-component")], 1)])]);
+  }), _vm._v(" "), _c("modal-component", {
+    attrs: {
+      id: "modalMarca",
+      titulo: "Adicionar marca"
+    }
+  })], 1)])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -2634,15 +2639,10 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _vm._m(0);
-};
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
   return _c("div", {
     staticClass: "modal fade",
     attrs: {
-      id: "exampleModal",
+      id: _vm.id,
       tabindex: "-1",
       "aria-labelledby": "exampleModalLabel",
       "aria-hidden": "true"
@@ -2658,7 +2658,14 @@ var staticRenderFns = [function () {
     attrs: {
       id: "exampleModalLabel"
     }
-  }, [_vm._v("Modal title")]), _vm._v(" "), _c("button", {
+  }, [_vm._v(_vm._s(_vm.titulo))]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, [_vm._v("...")]), _vm._v(" "), _vm._m(1)])])]);
+};
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("button", {
     staticClass: "close",
     attrs: {
       type: "button",
@@ -2669,9 +2676,11 @@ var staticRenderFns = [function () {
     attrs: {
       "aria-hidden": "true"
     }
-  }, [_vm._v("×")])])]), _vm._v(" "), _c("div", {
-    staticClass: "modal-body"
-  }, [_vm._v("...")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("×")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
     staticClass: "modal-footer"
   }, [_c("button", {
     staticClass: "btn btn-secondary",
@@ -2679,12 +2688,12 @@ var staticRenderFns = [function () {
       type: "button",
       "data-dismiss": "modal"
     }
-  }, [_vm._v("\n          Close\n        ")]), _vm._v(" "), _c("button", {
+  }, [_vm._v("\n          Fechar\n        ")]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-primary",
     attrs: {
       type: "button"
     }
-  }, [_vm._v("Save changes")])])])])]);
+  }, [_vm._v("Salvar")])]);
 }];
 render._withStripped = true;
 
