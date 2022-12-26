@@ -2174,10 +2174,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  computed: {
+    token: function token() {
+      var token = document.cookie.split(";").find(function (indice) {
+        return indice.includes("token=");
+      });
+      token = token.split("=")[1];
+      token = "Bearer " + token;
+      return token;
+    }
+  },
   data: function data() {
     return {
-      urlBase: 'http://localhost:8000/api/v1/marca',
-      nomeMarca: '',
+      urlBase: "http://localhost:8000/api/v1/marca",
+      nomeMarca: "",
       arquivoImagem: []
     };
   },
@@ -2188,12 +2198,13 @@ __webpack_require__.r(__webpack_exports__);
     salvar: function salvar() {
       console.log(this.nomeMarca, this.arquivoImagem[0]);
       var formData = new FormData();
-      formData.append('nome', this.nomeMarca);
-      formData.append('imagem', this.arquivoImagem[0]);
+      formData.append("nome", this.nomeMarca);
+      formData.append("imagem", this.arquivoImagem[0]);
       var config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          Authorization: this.token
         }
       };
       axios.post(this.urlBase, formData, config).then(function (response) {
@@ -2645,7 +2656,7 @@ var render = function render() {
       },
       proxy: true
     }])
-  }), _vm._v(" "), _c("modal-component", {
+  })], 1)]), _vm._v(" "), _c("modal-component", {
     attrs: {
       id: "modalMarca",
       titulo: "Adicionar marca"
@@ -2685,15 +2696,17 @@ var render = function render() {
               _vm.nomeMarca = $event.target.value;
             }
           }
-        })]), _vm._v("\n            " + _vm._s(_vm.nomeMarca) + "\n\n            "), _c("input-container-component", {
+        })]), _vm._v("\n        " + _vm._s(_vm.nomeMarca) + "\n      ")], 1), _vm._v(" "), _c("div", {
+          staticClass: "form-group"
+        }, [_c("input-container-component", {
           attrs: {
             titulo: "Imagem",
             id: "novoImagem",
             "id-help": "novoImagemHelp",
-            "texto-ajuda": "Seleciona uma imagem no formato PNG."
+            "texto-ajuda": "Selecione uma imagem no formato PNG"
           }
         }, [_c("input", {
-          staticClass: "form-control",
+          staticClass: "form-control-file",
           attrs: {
             type: "file",
             id: "novoImagem",
@@ -2705,7 +2718,7 @@ var render = function render() {
               return _vm.carregarImagem($event);
             }
           }
-        })]), _vm._v("\n          " + _vm._s(_vm.arquivoImagem) + "\n          ")], 1)];
+        })]), _vm._v("\n        " + _vm._s(_vm.arquivoImagem) + "\n      ")], 1)];
       },
       proxy: true
     }, {
@@ -2717,7 +2730,7 @@ var render = function render() {
             type: "button",
             "data-dismiss": "modal"
           }
-        }, [_vm._v("\n            Fechar\n          ")]), _vm._v(" "), _c("button", {
+        }, [_vm._v("\n        Fechar\n      ")]), _vm._v(" "), _c("button", {
           staticClass: "btn btn-primary",
           attrs: {
             type: "button"
@@ -2727,11 +2740,11 @@ var render = function render() {
               return _vm.salvar();
             }
           }
-        }, [_vm._v("Salvar")])];
+        }, [_vm._v("\n        Salvar\n      ")])];
       },
       proxy: true
     }])
-  })], 1)])]);
+  })], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
