@@ -1,13 +1,14 @@
 <template>
   <div :class="estilo" role="alert">
-    A simple success alert—check it out!
-    {{ tipo }}
+    {{ titulo }}
+    <hr />
+    <p class="mb-0">{{ detalhes}}</p>
   </div>
 </template>
 
 <script>
   export default {
-    props: ['tipo'],
+    props: ['tipo', 'titulo', 'detalhes'],
     computed: {
       estilo() {
         return `alert alert-${this.tipo}`;
