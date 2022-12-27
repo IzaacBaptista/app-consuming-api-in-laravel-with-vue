@@ -72,8 +72,8 @@
 
     <modal-component id="modalMarca" titulo="Adicionar marca">
       <template v-slot:alertas>
-        <alert-component tipo="success"></alert-component>
-        <alert-component tipo="danger"></alert-component>
+        <alert-component tipo="success" v-if="transacaoStatus == 'success'"></alert-component>
+        <alert-component tipo="danger" v-if="transacaoStatus == 'danger'"></alert-component>
       </template>
       <template v-slot:conteudo>
         <div class="form-group">
@@ -146,6 +146,7 @@ export default {
       urlBase: "http://localhost:8000/api/v1/marca",
       nomeMarca: "",
       arquivoImagem: [],
+      transacaoStatus: ''
     };
   },
   methods: {
@@ -170,9 +171,11 @@ export default {
       axios
         .post(this.urlBase, formData, config)
         .then((response) => {
+          this.transacaoStatus = 'success'
           console.log(response);
         })
         .catch((errors) => {
+          this.transacaoStatus = 'danger'
           console.log(errors);
         });
     },
