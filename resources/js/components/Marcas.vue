@@ -190,7 +190,7 @@ export default {
         .catch((errors) => {
           this.transacaoStatus = "erro";
           this.transacaoDetalhes = errors.response;
-          //errors.response.data.message
+          console.log(errors.response.data.errors.imagem[1]);
         });
     },
   },
