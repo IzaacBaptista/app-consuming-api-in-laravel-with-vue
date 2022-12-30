@@ -52,7 +52,7 @@
         <!-- início do card de listagem de marcas -->
         <card-component titulo="Relação de marcas">
           <template v-slot:conteudo>
-            <table-component 
+            <table-component
               :dados="marcas"
               :titulos="['id', 'nome', 'imagem']"
             ></table-component>
@@ -175,7 +175,7 @@ export default {
         })
         .then((response) => {
           this.marcas = response.data;
-          console.log(this.marcas); 
+          console.log(this.marcas);
         })
         .catch((error) => {
           console.log(error);
