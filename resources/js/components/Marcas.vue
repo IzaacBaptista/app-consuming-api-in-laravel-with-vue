@@ -54,7 +54,12 @@
           <template v-slot:conteudo>
             <table-component
               :dados="marcas"
-              :titulos="['id', 'nome', 'imagem']"
+              :titulos="{
+                id: {titulo: 'ID', tipo: 'texto'},
+                nome: {titulo: 'Nome', tipo: 'texto'},
+                imagem: {titulo: 'Imagem', tipo: 'imagem'},
+                created_at: {titulo: 'Criação', tipo: 'data'},
+              }"
             ></table-component>
           </template>
 
@@ -175,7 +180,7 @@ export default {
         })
         .then((response) => {
           this.marcas = response.data;
-          console.log(this.marcas);
+          //console.log('marcas', this.marcas);
         })
         .catch((error) => {
           console.log(error);
