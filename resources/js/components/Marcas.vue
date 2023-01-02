@@ -124,8 +124,11 @@ import Paginate from './Paginate.vue'
         },
         methods: {
             paginacao(l) {
-                this.urlBase = l.url
-                this.carregarLista()
+                if(l.url) {
+                    this.urlBase = l.url
+                    this.carregarLista()
+                }
+                
             },
             carregarLista() {
 
