@@ -8,7 +8,6 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-
         $credenciais = $request->all(['email', 'password']); //[]
 
         //autenticação (email e senha)
