@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col-10">
                                 <paginate-component>
-                                    <li v-for="l, key in marcas.links" :key="key" class="page-item" @click="paginacao(l)">    
+                                    <li v-for="l, key in marcas.links" :key="key" class="page-item" @click="paginacao(l)">
                                         <a class="page-link" href="#" v-html="l.label"></a>
                                     </li>
                                 </paginate-component>
@@ -128,7 +128,7 @@ import Paginate from './Paginate.vue'
                     this.urlBase = l.url
                     this.carregarLista()
                 }
-                
+
             },
             carregarLista() {
 
