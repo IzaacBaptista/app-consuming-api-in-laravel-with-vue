@@ -33,6 +33,9 @@
                     <template v-slot:conteudo>
                         <table-component
                             :dados="marcas.data"
+                            :visualizar="{ visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaVisualizar' }"
+                            :editar="{ visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaEditar' }"
+                            :excluir="{ visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaExcluir' }"
                             :titulos="{
                                 id: {titulo: 'ID', tipo: 'texto'},
                                 nome: {titulo: 'Nome', tipo: 'texto'},
@@ -63,7 +66,7 @@
         </div>
 
 
-
+        <!--inicio do modal de inclusão de marca-->
         <modal-component id="modalMarca" titulo="Adicionar marca">
 
             <template v-slot:alertas>
@@ -92,6 +95,49 @@
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
+        <!--fim do modal de inclusão de marca-->
+
+        <!--inicio do modal de visualização de marca-->
+        <modal-component id="modalMarcaVisualizar" titulo="visualizar marca">
+            <template v-slot:alertas>
+                Alerta
+            </template>
+            <template v-slot:conteudo>
+                Conteúdo
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!--fim do modal de visualização de marca-->
+
+        <!--inicio do modal de edição de marca-->
+        <modal-component id="modalMarcaEditar" titulo="editar marca">
+            <template v-slot:alertas>
+                Alerta
+            </template>
+            <template v-slot:conteudo>
+                Conteúdo
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!--fim do modal de edição de marca-->
+
+        <!--inicio do modal de exclusão de marca-->
+        <modal-component id="modalMarcaExcluir" titulo="excluir marca">
+            <template v-slot:alertas>
+                Alerta
+            </template>
+            <template v-slot:conteudo>
+                Conteúdo
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!--fim do modal de exclusão de marca-->
     </div>
 </template>
 

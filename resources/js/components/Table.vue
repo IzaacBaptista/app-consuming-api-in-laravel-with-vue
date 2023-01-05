@@ -6,6 +6,8 @@
           <th scope="col" v-for="(t, key) in titulos" :key="key">
             {{ t.titulo }}
           </th>
+          <th v-if="visualizar.visivel || editar.visivel || excluir.visivel">
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -19,6 +21,17 @@
               <img :src="'/storage/' + valor" width="30" height="30" />
             </span>
           </td>
+          <td v-if="visualizar.visivel || editar.visivel || excluir.visivel">
+            <button v-if="visualizar.visivel " class="btn btn-outline-success btn-sm" :data-toggle="visualizar.dataToggle" :data-target="visualizar.dataTarget">
+              Visualizar
+            </button>
+            <button v-if="editar.visivel " class="btn btn-outline-primary btn-sm" :data-toggle="editar.dataToggle" :data-target="editar.dataTarget">
+              Editar
+            </button>
+            <button v-if="excluir.visivel " class="btn btn-outline-danger btn-sm" :data-toggle="excluir.dataToggle" :data-target="excluir.dataTarget">
+              Excluir
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -27,7 +40,7 @@
 
 <script>
 export default {
-  props: ["dados", "titulos"],
+  props: ["dados", "titulos", "visualizar", "editar", "excluir"],
   computed: {
     dadosFiltrados() {
       let campos = Object.keys(this.titulos);
