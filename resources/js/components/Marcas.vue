@@ -145,7 +145,7 @@ import Paginate from './Paginate.vue'
                 } else {
                     this.urlFiltro = ''
                 }
-                
+
                 this.carregarLista()
             },
             paginacao(l) {
