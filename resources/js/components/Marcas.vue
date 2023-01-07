@@ -100,10 +100,17 @@
         <!--inicio do modal de visualização de marca-->
         <modal-component id="modalMarcaVisualizar" titulo="visualizar marca">
             <template v-slot:alertas>
-                Alerta
             </template>
             <template v-slot:conteudo>
-                Conteúdo
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>                    
+                </input-container-component>
+                <input-container-component titulo="Nome da marca">
+                    <input type="text" class="form-control" :value="$store.state.item.nome" disabled>                    
+                </input-container-component>
+                <input-container-component titulo="">
+                    <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
+                </input-container-component>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -114,13 +121,21 @@
         <!--inicio do modal de edição de marca-->
         <modal-component id="modalMarcaEditar" titulo="editar marca">
             <template v-slot:alertas>
-                Alerta
             </template>
             <template v-slot:conteudo>
-                Conteúdo
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="$store.state.item.id">                    
+                </input-container-component>
+                <input-container-component titulo="Nome da marca">
+                    <input type="text" class="form-control" :value="$store.state.item.nome">                    
+                </input-container-component>
+                <input-container-component titulo="">
+                    <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
+                </input-container-component>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
         <!--fim do modal de edição de marca-->
@@ -128,13 +143,13 @@
         <!--inicio do modal de exclusão de marca-->
         <modal-component id="modalMarcaExcluir" titulo="excluir marca">
             <template v-slot:alertas>
-                Alerta
             </template>
             <template v-slot:conteudo>
-                Conteúdo
+                Tem certeza que deseja excluir + $store.state.item.nome + ?
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" @click="excluir()">Excluir</button>
             </template>
         </modal-component>
         <!--fim do modal de exclusão de marca-->
