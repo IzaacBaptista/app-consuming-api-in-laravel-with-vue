@@ -101,10 +101,10 @@
             </template>
             <template v-slot:conteudo>
                 <input-container-component titulo="ID">
-                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>                    
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>
                 </input-container-component>
                 <input-container-component titulo="Nome da marca">
-                    <input type="text" class="form-control" :value="$store.state.item.nome" disabled>                    
+                    <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
                 </input-container-component>
                 <input-container-component titulo="Imagem">
                     <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
@@ -122,10 +122,10 @@
             </template>
             <template v-slot:conteudo>
                 <input-container-component titulo="ID">
-                    <input type="text" class="form-control" :value="$store.state.item.id">                    
+                    <input type="text" class="form-control" :value="$store.state.item.id">
                 </input-container-component>
                 <input-container-component titulo="Nome da marca">
-                    <input type="text" class="form-control" :value="$store.state.item.nome">                    
+                    <input type="text" class="form-control" :value="$store.state.item.nome">
                 </input-container-component>
                 <input-container-component titulo="Imagem">
                     <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
@@ -212,7 +212,7 @@ import Paginate from './Paginate.vue'
                 } else {
                     this.urlFiltro = ''
                 }
-                
+
                 this.carregarLista()
             },
             paginacao(l) {
@@ -288,7 +288,7 @@ import Paginate from './Paginate.vue'
                     .then(response => {
                         this.transacaoStatus = 'excluido'
                         this.transacaoDetalhes = {
-                            mensagem: 'O registro foi excluído com sucesso' 
+                            mensagem: 'O registro foi excluído com sucesso'
                         }
                         this.carregarLista()
                         console.log(response)
