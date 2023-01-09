@@ -79,14 +79,12 @@
                     <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp" texto-ajuda="Informe o nome da marca">
                         <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp" placeholder="Nome da marca" v-model="nomeMarca">
                     </input-container-component>
-                    {{ nomeMarca }}
                 </div>
 
                 <div class="form-group">
                     <input-container-component titulo="Imagem" id="novoImagem" id-help="novoImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
                         <input type="file" class="form-control-file" id="novoImagem" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
                     </input-container-component>
-                    {{ arquivoImagem }}
                 </div>
             </template>
 
@@ -108,7 +106,7 @@
                 <input-container-component titulo="Nome da marca">
                     <input type="text" class="form-control" :value="$store.state.item.nome" disabled>                    
                 </input-container-component>
-                <input-container-component titulo="">
+                <input-container-component titulo="Imagem">
                     <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
                 </input-container-component>
             </template>
@@ -129,9 +127,12 @@
                 <input-container-component titulo="Nome da marca">
                     <input type="text" class="form-control" :value="$store.state.item.nome">                    
                 </input-container-component>
-                <input-container-component titulo="">
+                <input-container-component titulo="Imagem">
                     <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
                 </input-container-component>
+                <div class="form-group">
+                    <input type="file" class="form-control-file" id="novoImagem" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
+                </div>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -143,13 +144,18 @@
         <!--inicio do modal de exclusão de marca-->
         <modal-component id="modalMarcaExcluir" titulo="excluir marca">
             <template v-slot:alertas>
+                <alert-component tipo="success" :detalhes="transacaoDetalhes" v-if="transacaoStatus == 'excluido'"></alert-component>
+                <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar excluir a marca" v-if="transacaoStatus == 'erro'"></alert-component>
             </template>
-            <template v-slot:conteudo>
-                Tem certeza que deseja excluir + $store.state.item.nome + ?
+            <template v-slot:conteudo v-if="transacaoStatus != 'excluido'">
+                Tem certeza que deseja excluir a marca {{$store.state.item.nome}}?
             </template>
+            <input-container-component titulo="Imagem">
+                <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
+            </input-container-component>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" @click="excluir()">Excluir</button>
+                <button type="button" class="btn btn-danger" @click="excluir()" v-if="transacaoStatus != 'excluido'">Excluir</button>
             </template>
         </modal-component>
         <!--fim do modal de exclusão de marca-->
@@ -230,7 +236,6 @@ import Paginate from './Paginate.vue'
                 axios.get(url, config)
                     .then(response => {
                         this.marcas = response.data
-                        console.log(this.marcas)
                     })
                     .catch(errors => {
                         console.log(errors)
@@ -240,7 +245,6 @@ import Paginate from './Paginate.vue'
                 this.arquivoImagem = e.target.files
             },
             salvar() {
-                console.log(this.nomeMarca, this.arquivoImagem[0])
 
                 let formData = new FormData();
                 formData.append('nome', this.nomeMarca)
@@ -261,6 +265,32 @@ import Paginate from './Paginate.vue'
                             mensagem: 'ID do registro: ' + response.data.id
                         }
 
+                        this.carregarLista()
+
+                    })
+                    .catch(errors => {
+                        this.transacaoStatus = 'erro'
+                        this.transacaoDetalhes = {
+                            mensagem: errors.response.data.message,
+                            dados: errors.response.data.errors
+                        }
+                    })
+            },
+            excluir() {
+                let config = {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.delete(this.urlBase + '/' + this.$store.state.item.id, config)
+                    .then(response => {
+                        this.transacaoStatus = 'excluido'
+                        this.transacaoDetalhes = {
+                            mensagem: 'O registro foi excluído com sucesso' 
+                        }
+                        this.carregarLista()
                         console.log(response)
                     })
                     .catch(errors => {
@@ -269,7 +299,6 @@ import Paginate from './Paginate.vue'
                             mensagem: errors.response.data.message,
                             dados: errors.response.data.errors
                         }
-                        //errors.response.data.message
                     })
             }
         },
