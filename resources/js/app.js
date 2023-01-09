@@ -14,10 +14,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  state: {
-    item: {},
-    transacao: { status: '', message: '' }
-  },
+  state: { item: {}, transacao: { status: "", message: "" } },
 });
 
 /**
@@ -59,7 +56,4 @@ Vue.component(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-  el: "#app",
-  store
-});
+const app = new Vue({ el: "#app", store });
