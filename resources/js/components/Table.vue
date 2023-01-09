@@ -25,10 +25,10 @@
             <button v-if="visualizar.visivel " class="btn btn-outline-success btn-sm" :data-toggle="visualizar.dataToggle" :data-target="visualizar.dataTarget" @click="setStore(obj)">
               Visualizar
             </button>
-            <button v-if="editar.visivel " class="btn btn-outline-primary btn-sm" :data-toggle="editar.dataToggle" :data-target="editar.dataTarget">
+            <button v-if="editar.visivel " class="btn btn-outline-primary btn-sm" :data-toggle="editar.dataToggle" :data-target="editar.dataTarget" @click="setStore(obj)">
               Editar
             </button>
-            <button v-if="excluir.visivel " class="btn btn-outline-danger btn-sm" :data-toggle="excluir.dataToggle" :data-target="excluir.dataTarget">
+            <button v-if="excluir.visivel " class="btn btn-outline-danger btn-sm" :data-toggle="excluir.dataToggle" :data-target="excluir.dataTarget" @click="setStore(obj)">
               Excluir
             </button>
           </td>
