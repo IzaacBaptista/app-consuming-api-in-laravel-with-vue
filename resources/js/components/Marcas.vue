@@ -118,25 +118,26 @@
 
         <!--inicio do modal de edição de marca-->
         <modal-component id="modalMarcaEditar" titulo="editar marca">
-            <template v-slot:alertas>
+             <template v-slot:alertas>
+                <alert-component tipo="success" :detalhes="transacaoDetalhes" v-if="transacaoStatus == 'atualizado'"></alert-component>
+                <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar atualizar a marca" v-if="transacaoStatus == 'erro'"></alert-component>
             </template>
             <template v-slot:conteudo>
-                <input-container-component titulo="ID">
-                    <input type="text" class="form-control" :value="$store.state.item.id">
-                </input-container-component>
-                <input-container-component titulo="Nome da marca">
-                    <input type="text" class="form-control" :value="$store.state.item.nome">
-                </input-container-component>
-                <input-container-component titulo="Imagem">
-                    <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
-                </input-container-component>
                 <div class="form-group">
-                    <input type="file" class="form-control-file" id="novoImagem" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
+                    <input-container-component titulo="Nome da marca" id="atualizarNome" id-help="atualizarNomeHelp" texto-ajuda="Informe o nome da marca">
+                        <input type="text" class="form-control" id="atualizarNome" aria-describedby="atualizarNomeHelp" placeholder="Nome da marca" v-model="$store.state.item.nome">
+                    </input-container-component>
+                </div>
+
+                <div class="form-group">
+                    <input-container-component titulo="Imagem" id="atualizarImagem" id-help="atualizarImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
+                        <input type="file" class="form-control-file" id="atualizarImagem" aria-describedby="atualizarImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
+                    </input-container-component>
                 </div>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
+                <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
             </template>
         </modal-component>
         <!--fim do modal de edição de marca-->
@@ -277,6 +278,9 @@ import Paginate from './Paginate.vue'
                     })
             },
             excluir() {
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
                 let config = {
                     headers: {
                         'Accept': 'application/json',
@@ -284,7 +288,7 @@ import Paginate from './Paginate.vue'
                     }
                 }
 
-                axios.delete(this.urlBase + '/' + this.$store.state.item.id, config)
+                axios.delete(url, config)
                     .then(response => {
                         this.transacaoStatus = 'excluido'
                         this.transacaoDetalhes = {
@@ -299,6 +303,39 @@ import Paginate from './Paginate.vue'
                             mensagem: errors.response.data.message,
                             dados: errors.response.data.errors
                         }
+                    })
+            },
+            atualizar() {
+
+                console.log(this.nomeMarca, this.arquivoImagem[0])
+
+                let formData = new FormData();
+                formData.append('nome', this.nomeMarca)
+                formData.append('imagem', this.arquivoImagem[0])
+
+                let config = {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.post(this.urlBase, formData, config)
+                    .then(response => {
+                        this.transacaoStatus = 'adicionado'
+                        this.transacaoDetalhes = {
+                            mensagem: 'ID do registro: ' + response.data.id
+                        }
+
+                        console.log(response)
+                    })
+                    .catch(errors => {
+                        this.transacaoStatus = 'erro'
+                        this.transacaoDetalhes = {
+                            mensagem: errors.response.data.message,
+                            dados: errors.response.data.errors
+                        }
+                        //errors.response.data.message
                     })
             }
         },
