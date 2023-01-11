@@ -307,11 +307,17 @@ import Paginate from './Paginate.vue'
             },
             atualizar() {
 
-                console.log(this.nomeMarca, this.arquivoImagem[0])
-
                 let formData = new FormData();
-                formData.append('nome', this.nomeMarca)
-                formData.append('imagem', this.arquivoImagem[0])
+
+                if(this.nomeMarca) {
+                    formData.append('nome', this.nomeMarca)
+                }
+
+                if(this.arquivoImagem[0]) {
+                    formData.append('imagem', this.arquivoImagem[0])
+                }
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
 
                 let config = {
                     headers: {
@@ -320,14 +326,14 @@ import Paginate from './Paginate.vue'
                     }
                 }
 
-                axios.post(this.urlBase, formData, config)
+                axios.put(url, formData, config)
                     .then(response => {
                         this.transacaoStatus = 'adicionado'
                         this.transacaoDetalhes = {
                             mensagem: 'ID do registro: ' + response.data.id
                         }
-
-                        console.log(response)
+                        atualizarImagem.value = ''
+                        this.carregarLista()
                     })
                     .catch(errors => {
                         this.transacaoStatus = 'erro'
