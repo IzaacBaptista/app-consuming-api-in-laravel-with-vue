@@ -136,7 +136,7 @@
                 </div>
             </template>
             <template v-slot:rodape>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="carregarLista()">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
             </template>
         </modal-component>
@@ -155,7 +155,7 @@
                 <img :src="'storage/'+$store.state.item.imagem" class="img-fluid">
             </input-container-component>
             <template v-slot:rodape>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="carregarLista()">Fechar</button>
                 <button type="button" class="btn btn-danger" @click="excluir()" v-if="transacaoStatus != 'excluido'">Excluir</button>
             </template>
         </modal-component>
@@ -309,13 +309,8 @@ import Paginate from './Paginate.vue'
 
                 let formData = new FormData();
 
-                if(this.nomeMarca) {
-                    formData.append('nome', this.nomeMarca)
-                }
-
-                if(this.arquivoImagem[0]) {
-                    formData.append('imagem', this.arquivoImagem[0])
-                }
+                formData.append('nome', this.nomeMarca)
+                formData.append('imagem', this.arquivoImagem[0])
 
                 let url = this.urlBase + '/' + this.$store.state.item.id
 
@@ -326,13 +321,15 @@ import Paginate from './Paginate.vue'
                     }
                 }
 
-                axios.put(url, formData, config)
+                axios.patch(url, formData, config)
                     .then(response => {
-                        this.transacaoStatus = 'adicionado'
+                        this.transacaoStatus = 'atualizado'
                         this.transacaoDetalhes = {
-                            mensagem: 'ID do registro: ' + response.data.id
+                            mensagem: 'O registro foi atualizado com sucesso'
                         }
-                        atualizarImagem.value = ''
+                        response.data.nome = this.$store.state.item.nome 
+                        response.data.imagem = this.arquivoImagem[0]
+                        console.log(response)
                         this.carregarLista()
                     })
                     .catch(errors => {
@@ -341,7 +338,6 @@ import Paginate from './Paginate.vue'
                             mensagem: errors.response.data.message,
                             dados: errors.response.data.errors
                         }
-                        //errors.response.data.message
                     })
             }
         },
