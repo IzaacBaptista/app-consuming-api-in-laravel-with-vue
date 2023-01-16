@@ -316,12 +316,14 @@ import Paginate from './Paginate.vue'
 
                 let config = {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         'Accept': 'application/json',
                         'Authorization': this.token
                     }
                 }
+                console.log('nome: ' + this.nomeMarca)
 
-                axios.patch(url, formData, config)
+                axios.patch(url, this.formData, config)
                     .then(response => {
                         this.transacaoStatus = 'atualizado'
                         this.transacaoDetalhes = {
