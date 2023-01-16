@@ -1,6 +1,6 @@
-const {default : axios} = require('axios');
+const { default: axios } = require("axios");
 
-window._ = require('lodash');
+window._ = require("lodash");
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -9,12 +9,11 @@ window._ = require('lodash');
  */
 
 try {
-  window.Popper = require('popper.js').default;
-  window.$ = window.jQuery = require('jquery');
+  window.Popper = require("popper.js").default;
+  window.$ = window.jQuery = require("jquery");
 
-  require('bootstrap');
-} catch (e) {
-}
+  require("bootstrap");
+} catch (e) {}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -22,9 +21,9 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = require("axios");
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -44,46 +43,47 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 axios.interceptors.request.use(
-    config => {
-        config.headers['Accept'] = 'application/json'
+  (config) => {
+    config.headers["Accept"] = "application/json";
 
-let token = document.cookie.split(';').find(
-    indice => {return indice.includes('token=')})
+    let token = document.cookie.split(";").find((indice) => {
+      return indice.includes("token=");
+    });
 
-token = token.split('=')[1]
-token = 'Bearer ' + token
+    token = token.split("=")[1];
+    token = "Bearer " + token;
 
-config.headers.Authorization = token
+    config.headers.Authorization = token;
 
-console.log('interceptors request', config)
+    console.log("interceptors request", config);
 
-        return config
-    },
-    error => {
-        console.log('interceptors request error', error)
-        return Promise.reject(error)
-    }
+    return config;
+  },
+  (error) => {
+    console.log("interceptors request error", error);
+    return Promise.reject(error);
+  }
 );
 
 axios.interceptors.response.use(
-    response => {
-        console.log('interceptors response', response)
-        return response
-    },
-    error => {
-  if (error.response.status === 401 &&
-      error.response.data.message === 'Unauthenticated.') {
-
-            axios.post('http://localhost:8000/api/refresh')
-                .then(response => {
-                    console.log(response)
-            document.cookie = 'token=' + response.data.token
-                    window.location.reload()
-                })
-  }
-
-  console.log('interceptors response error', error.response)
-
-  return Promise.reject(error)
+  (response) => {
+    console.log("interceptors response", response);
+    return response;
+  },
+  (error) => {
+    if (
+      error.response.status === 401 &&
+      error.response.data.message === "Unauthenticated."
+    ) {
+      axios.post("http://localhost:8000/api/refresh").then((response) => {
+        console.log(response);
+        document.cookie = "token=" + response.data.token;
+        window.location.reload();
+      });
     }
+
+    console.log("interceptors response error", error.response);
+
+    return Promise.reject(error);
+  }
 );
