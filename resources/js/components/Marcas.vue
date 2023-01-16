@@ -167,19 +167,6 @@
 import Paginate from './Paginate.vue'
     export default {
   components: { Paginate },
-        computed: {
-            token() {
-
-                let token = document.cookie.split(';').find(indice => {
-                    return indice.includes('token=')
-                })
-
-                token = token.split('=')[1]
-                token = 'Bearer ' + token
-
-                return token
-            }
-        },
         data() {
             return {
                 urlBase: 'http://localhost:8000/api/v1/marca',
@@ -225,16 +212,9 @@ import Paginate from './Paginate.vue'
             },
             carregarLista() {
 
-                let config = {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': this.token
-                    }
-                }
-
                 let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro
 
-                axios.get(url, config)
+                axios.get(url)
                     .then(response => {
                         this.marcas = response.data
                     })
@@ -254,8 +234,6 @@ import Paginate from './Paginate.vue'
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json',
-                        'Authorization': this.token
                     }
                 }
 
@@ -281,14 +259,7 @@ import Paginate from './Paginate.vue'
 
                 let url = this.urlBase + '/' + this.$store.state.item.id
 
-                let config = {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': this.token
-                    }
-                }
-
-                axios.delete(url, config)
+                axios.delete(url)
                     .then(response => {
                         this.transacaoStatus = 'excluido'
                         this.transacaoDetalhes = {
@@ -317,10 +288,9 @@ import Paginate from './Paginate.vue'
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json',
-                        'Authorization': this.token
                     }
                 }
+                
                 console.log('nome: ' + this.nomeMarca)
 
                 axios.patch(url, this.formData, config)
