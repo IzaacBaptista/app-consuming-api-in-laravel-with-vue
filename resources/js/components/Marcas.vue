@@ -290,8 +290,10 @@ import Paginate from './Paginate.vue'
                         'Content-Type': 'multipart/form-data',
                     }
                 }
+                
+                console.log('nome: ' + this.nomeMarca)
 
-                axios.patch(url, formData, config)
+                axios.patch(url, this.formData, config)
                     .then(response => {
                         this.transacaoStatus = 'atualizado'
                         this.transacaoDetalhes = {
