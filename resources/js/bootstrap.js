@@ -1,4 +1,4 @@
-const { default: axios } = require('axios');
+const {default : axios} = require('axios');
 
 window._ = require('lodash');
 
@@ -9,11 +9,12 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
+  window.Popper = require('popper.js').default;
+  window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
-} catch (e) {}
+  require('bootstrap');
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -42,21 +43,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: true
 // });
 
-
 axios.interceptors.request.use(
     config => {
         config.headers['Accept'] = 'application/json'
-        
-        let token = document.cookie.split(';').find(indice => {
-            return indice.includes('token=')
-        })
 
-        token = token.split('=')[1]
-        token = 'Bearer ' + token
+let token = document.cookie.split(';').find(
+    indice => {return indice.includes('token=')})
 
-        config.headers.Authorization = token
+token = token.split('=')[1]
+token = 'Bearer ' + token
 
-        console.log('interceptors request', config)
+config.headers.Authorization = token
+
+console.log('interceptors request', config)
 
         return config
     },
@@ -72,19 +71,19 @@ axios.interceptors.response.use(
         return response
     },
     error => {
-        
-        if(error.response.status === 401 && error.response.data.message === 'Unauthenticated.') {
-            
+  if (error.response.status === 401 &&
+      error.response.data.message === 'Unauthenticated.') {
+
             axios.post('http://localhost:8000/api/refresh')
                 .then(response => {
                     console.log(response)
-                    document.cookie = 'token=' + response.data.token
+            document.cookie = 'token=' + response.data.token
                     window.location.reload()
                 })
-        }
+  }
 
-        console.log('interceptors response error', error.response)
-        
-        return Promise.reject(error)
+  console.log('interceptors response error', error.response)
+
+  return Promise.reject(error)
     }
 );
