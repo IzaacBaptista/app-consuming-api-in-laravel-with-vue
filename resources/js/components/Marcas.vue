@@ -297,7 +297,7 @@ import Paginate from './Paginate.vue'
                         this.transacaoDetalhes = {
                             mensagem: 'O registro foi atualizado com sucesso'
                         }
-                        response.data.nome = this.$store.state.item.nome 
+                        response.data.nome = this.$store.state.item.nome
                         response.data.imagem = this.arquivoImagem[0]
                         console.log(response)
                         this.carregarLista()
